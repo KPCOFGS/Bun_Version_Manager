@@ -41,7 +41,7 @@ python bvm.py list
 BVM modifies shell configurations to manage environment variables related to .bun versions. Ensure your shell configuration file (~/.bashrc, ~/.zshrc, or ~/.config/fish/config.fish) is correctly configured after installation.
 
 ## License
-This project is licensed under the Unlicense License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under The Unlicense license - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 * Special thanks to the [Bun](https://github.com/oven-sh/bun) team for their amazing project.
