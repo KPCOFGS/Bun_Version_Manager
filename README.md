@@ -7,6 +7,7 @@ Bun Version Manager (BVM) is a Python script designed to manage different versio
 * Delete Version: Remove a previously installed .bun version.
 * Switch Version: Set a specific .bun version as the active version.
 * List Versions: Display all downloaded .bun versions.
+* Browse Versions: Display Bun releases page by page.
 ## Requirements
 * Python 3.x
 * requests and beautifulsoup4 library
@@ -37,8 +38,14 @@ python bvm.py switch 1.1.1
 ```bash
 python bvm.py list
 ```
+* browse: Browse all Bun releases page by page, default to page 1.
+```bash
+python bvm.py browse PAGE_NUMBER
+```
+
 ## Configuration
 * By default, BVM stores versions in ~/bvm/. Ensure this directory is writable and accessible.
+  
 ## Shell Configuration
 
 BVM modifies shell configurations to manage environment variables related to .bun versions. Ensure your shell configuration file (~/.bashrc, ~/.zshrc, or ~/.config/fish/config.fish) is correctly configured after installation.
@@ -47,5 +54,5 @@ BVM modifies shell configurations to manage environment variables related to .bu
 This project is licensed under The Unlicense license - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
-* Special thanks to the [Bun](https://github.com/oven-sh/bun) team for their amazing project.
 * Inspired by the need to manage multiple .bun versions efficiently on Unix-like systems.
+* Special thanks to the [Bun](https://github.com/oven-sh/bun) team and contributors for their time and efforts.
