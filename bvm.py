@@ -2,7 +2,8 @@ import os
 import shutil
 import argparse
 import subprocess
-
+import requests
+from bs4 import BeautifulSoup
 class BunVersionManager():
     def __init__(self):
         self.base_dir = os.path.join(os.path.expanduser("~"), "bvm")
@@ -71,8 +72,6 @@ class BunVersionManager():
                         f.write(f'\nif [ -f "$HOME/bvm/current_version" ]; then\n')
                         f.write(f'    {path_line}="$(cat $HOME/bvm/current_version)/.bun/bin:$PATH"\n')
                         f.write(f'fi\n')
-
-
     def delete(self, version):
         version_dir = self._get_version_dir(version)
         if not os.path.exists(version_dir):
@@ -88,8 +87,7 @@ class BunVersionManager():
         # Write the version directory to the dynamic file
         with open(self.dynamic_file, 'w') as f:
             f.write(f'{version_dir}')
-        self.refresh_shell()
-
+        print("Success! Switched to the new bun version. Start a new shell session for this to take effect")
     def list(self):
         versions = os.listdir(self.base_dir)
         if versions:
@@ -100,17 +98,30 @@ class BunVersionManager():
         else:
             print("No versions downloaded.")
 
-    def refresh_shell(self):
-        try:
-            if os.name == 'posix':  # Unix-like system
-                os.system("exec $SHELL")
-        except Exception as e:
-            print(f"An error occurred while refreshing the shell: {e}. Open a new shell session for the script to take effect")
-
+    def browse(self, page_number):
+        url = f"https://github.com/oven-sh/bun/releases?page={page_number}"
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            links = soup.find_all('a', class_='Link--primary Link')
+            print(f"*** Page {page_number} ***")
+            print()
+            _next = 0
+            for link in links:
+                print(link.get_text())
+                _next += 1
+            if _next == 10:
+                print()
+                print(f"To see more results, do: python bvm.py browse {int(page_number) + 1}")
+            elif _next == 0:
+                print("No content")
+        else:
+            print(f"Failed to fetch page {page_number}: Status code {response.status_code}")
 
 def main():
     parser = argparse.ArgumentParser(description='Manage .bun versions.')
-    parser.add_argument('command', choices=['add', 'delete', 'switch', 'list'])
+    parser.add_argument('command', choices=['add', 'delete', 'switch', 'list', 'browse'])
     parser.add_argument('version', nargs='?', help='The version to operate on.')
 
     args = parser.parse_args()
@@ -125,6 +136,13 @@ def main():
         bun_manager.switch(args.version)
     elif args.command == 'list':
         bun_manager.list()
-
+    elif args.command == 'browse':
+        if args.version:
+            try:
+                bun_manager.browse(int(args.version))
+            except:
+                print("Please provide a valid page number")
+        elif not args.version:
+            bun_manager.browse(1)
 if __name__ == "__main__":
     main()
