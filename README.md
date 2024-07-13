@@ -19,26 +19,18 @@ git clone https://github.com/KPCOFGS/bvm.git
 ## Usage
 **Commands:**
 * add <version>: Adds the specified .bun version to the system.
-
-**Example:**
 ```bash
 python bvm.py add bun-v1.2.3
 ```
 * delete <version>: Deletes the specified .bun version from the system.
-
-**Example:**
 ```bash
 python bvm.py delete bun-v1.2.3
 ```
 * switch <version>: Switches the active .bun version to the specified version.
-
-**Example:**
 ```bash
 python bvm.py switch bun-v1.2.3
 ```
 * list: Lists all downloaded .bun versions.
-
-Example:
 ```bash
 python bvm.py list
 ```
