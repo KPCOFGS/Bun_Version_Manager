@@ -14,7 +14,7 @@ Bun Version Manager (BVM) is a Python script designed to manage different versio
 1. Clone the repository or download the script directly.
 
 ```bash
-git clone 
+git clone https://github.com/KPCOFGS/bvm.git
 ```
 
 2. Ensure Python 3.x is installed on your system.
