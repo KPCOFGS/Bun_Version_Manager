@@ -6,15 +6,32 @@ import requests
 from bs4 import BeautifulSoup
 class BunVersionManager():
     def __init__(self):
+        '''
+        Creates bvm folder if it does not exist.
+        Creates current_version in the bvm folder.
+        current_version file keeps track of the current using version of Bun.
+        '''
         self.base_dir = os.path.join(os.path.expanduser("~"), "bvm")
         self.dynamic_file = os.path.join(self.base_dir, "current_version")
         if not os.path.exists(self.base_dir):
             os.makedirs(self.base_dir)
 
     def _get_version_dir(self, version):
+        '''
+        Get version directories
+        '''
         return os.path.join(self.base_dir, version)
 
     def add(self, version):
+        '''
+        Add a Bun version if it does not exist in bvm folder.
+        Download the version using curl
+        Bun will be downloaded as .bun folder in your home directory.
+        Then Move .bun to ~/bvm/its_version_folder
+        Bun will also add PATH to your shell regardless of existing duplicates.
+        Which will be fixed by removing duplicates
+        Then switch to the downloaded version automatically
+        '''
         version_dir = self._get_version_dir(version)
         if os.path.exists(version_dir):
             print(f"Version {version} already exists.")
@@ -35,6 +52,11 @@ class BunVersionManager():
         self.switch(version)
 
     def remove_env_exports(self):
+        '''
+        Bun will add PATH to your shell regardless of existing duplicates.
+        Which will be fixed by removing duplicates.
+        Then add a new PATH that will recognize what version of Bun user's using
+        '''
         shell = os.getenv('SHELL')
         if shell:
             shell = shell.split('/')[-1]  # Extract the shell name (e.g., bash, zsh, fish)
@@ -73,6 +95,9 @@ class BunVersionManager():
                         f.write(f'    {path_line}="$(cat $HOME/bvm/current_version)/.bun/bin:$PATH"\n')
                         f.write(f'fi\n')
     def delete(self, version):
+        '''
+        Delete a version
+        '''
         version_dir = self._get_version_dir(version)
         if not os.path.exists(version_dir):
             print(f"Version {version} does not exist.")
@@ -80,6 +105,9 @@ class BunVersionManager():
         shutil.rmtree(version_dir)
 
     def switch(self, version):
+        '''
+        Switch a version
+        '''
         version_dir = self._get_version_dir(version)
         if not os.path.exists(version_dir):
             print(f"Version {version} does not exist.")
@@ -89,6 +117,9 @@ class BunVersionManager():
             f.write(f'{version_dir}')
         print("Success! Switched to the new bun version. Start a new shell session for this to take effect")
     def list(self):
+        '''
+        List all downloaded Bun versions
+        '''
         versions = os.listdir(self.base_dir)
         if versions:
             print("Downloaded versions:")
@@ -99,6 +130,9 @@ class BunVersionManager():
             print("No versions downloaded.")
 
     def browse(self, page_number):
+        '''
+        Browse through Bun releases using requests and beautifulsoup4
+        '''
         url = f"https://github.com/oven-sh/bun/releases?page={page_number}"
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"}
         response = requests.get(url, headers=headers)
