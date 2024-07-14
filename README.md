@@ -1,6 +1,6 @@
 # Bun Version Manager
 
-Bun Version Manager (BVM) is a Python script designed to manage different versions of the .bun package manager on Unix-like systems. It allows you to add, delete, switch between, and list installed .bun versions conveniently from the command line.
+Bun Version Manager (BVM) is a Python script designed to manage different versions of the .bun package manager on Unix-like systems. It allows you to add, delete, switch between, list installed, and browse .bun versions conveniently from the command line.
 
 ## Features
 * Add Version: Download and install a specific version of .bun into a designated directory.
